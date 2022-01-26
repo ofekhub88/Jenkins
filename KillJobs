@@ -1,0 +1,43 @@
+import hudson.model.*
+import hudson.slaves.*
+import java.util.concurrent.*
+import jenkins.model.Jenkins
+
+
+jenkins.model.Jenkins.instance.computers.each {
+  if (! it.name.contains("master") ) {
+         def a =  it.getDisplayExecutors()
+          if ( a !=  [] ) {
+               for (  i in a)   {
+                 build= i.toString().split("runId=") [1].split(",label")[0]    // .getClass()      //.split(":")
+                 JobName=build.split("#")[0]
+                 BranchName=JobName.split("/") [1]
+                 JobName=JobName.split("/") [0]
+                 JobNumber=build.split("#")[1].toInteger()
+                  println JobName+":"+BranchName+":"+JobNumber
+                 Thread.getAllStackTraces().keySet().each() {
+                  if (it.name.contains('poc')) {  
+                    println "Stopping $it.name"
+                     it.stop()
+                     }
+}
+  //                Jenkins.instance.getItemByFullName(JobName).getBranch(BranchName).getBuildByNumber(JobNumber).finish(hudson.model.Result.ABORTED, new java.io.IOException("Aborting build"));
+                      }
+          }
+  }
+}
+
+
+
+  Thread.getAllStackTraces().keySet().each() {
+    println it.name
+    if (it.name.contains('omputer.threadPoolForRemoting')) {  
+      println "Stopping $it.name"
+      it.stop()     }
+}          
+Return()
+  //                Jenkins
+
+
+
+http://jenkins-jenkins.apps.ilocpdev401.ocpd.corp.amdocs.com/computer/ms360-ci-slave-ocp-helm-java-l4w3r-810cv/executors/0/stopBuild?runExtId=
